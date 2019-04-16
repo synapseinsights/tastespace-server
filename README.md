@@ -40,5 +40,12 @@ This will do the same as above, but the server will auto-restart when any new ch
 2. `ejs` [ejs](https://www.npmjs.com/package/ejs) for dynamic templating
 3. `body-parser` [body-parser](https://www.npmjs.com/package/body-parser) for parsing incoming request bodies 
     
+---
+
+## Useful guides/explainers/howtos
+
+[What is package.json](https://medium.com/coinmonks/everything-you-wanted-to-know-about-package-lock-json-b81911aa8ab8)  
+[npm scripts](https://medium.com/javascript-training/introduction-to-using-npm-as-a-build-tool-b41076f488b0)
+[babel](https://medium.com/@JedaiSaboteur/import-export-babel-and-node-a2e332d15673)  
 
 
