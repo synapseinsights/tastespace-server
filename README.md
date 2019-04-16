@@ -32,7 +32,7 @@ This will do the same as above, but the server will auto-restart when any new ch
 2. `express` [express](https://expressjs.com/en/guide/routing.html) is the core framework for server and route creation (like Flask or Sanic)
 3. `firebase` [firebase](https://www.npmjs.com/package/firebase) is for database read/write operations
 4. `firebase-admin` [firebase-admin](https://www.npmjs.com/package/firebase-admin) is for database configuration and user authorization
-5. `babel` and `babel-preset-env` 
+5. `babel` and `babel-preset-env` these packages are for "transpiling", i.e. allowing us to write javascript using the most modern syntax (e.g. `import`) while allowing compatibility with various node versions that may not support the new syntax
 
 ### Dependencies we might need?
 
