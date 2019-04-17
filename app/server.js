@@ -1,11 +1,11 @@
 import dotenv from 'dotenv';
-// Load environment variabels for the app
+// Load environment variables for the app
 dotenv.config();
 import express from 'express';
 import bodyParser from 'body-parser'
 import logger from 'morgan'
-import * as path from 'path'
 import admin from 'firebase-admin';
+import * as path from 'path'
 import routes from './routes';
 
 // Setup firebase administration
@@ -31,9 +31,11 @@ const app = express();
 // Use ejs if we want to render templates with variables in them like jinja in flask
 app.set('view engine', 'ejs');
 
-// We also want to be able to send css, images, and other static files
+// Serve files in the views folder as static and map the name 'view' to the full path location of the folder so it's always found regardless of where the node process is run from
 app.use(express.static('views'));
-app.set('views', __dirname + '/views');
+app.set('views', path.join(__dirname, '/views'));
+// Make the public folder available at the root of the app so that files can be access via /images/pic.png or js/somefile.js
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Giver server access to user form inputs and make it easy to access, e.g.
 // req.body.nameOfForm
@@ -46,11 +48,6 @@ app.use(logger("dev"));
 // Set the default route
 app.get('/', (req, res) => {
     res.render("home.ejs");});
-
-// Quick demo on posting to the default route
-app.post('/', (req, res) => {
-    res.render("hello.ejs", { data: req.body.name});
-});
 
 // Register other routes
 routes(app);
