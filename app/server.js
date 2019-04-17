@@ -6,7 +6,7 @@ import bodyParser from 'body-parser'
 import logger from 'morgan'
 import admin from 'firebase-admin';
 import * as path from 'path'
-import routes from './routes';
+import router from './routes';
 
 // Setup firebase administration
 const firebaseAdmin = admin.initializeApp({
@@ -45,12 +45,8 @@ app.use(bodyParser.urlencoded({ extended: true}));
 // Tell app to use a logger to when the server gets requests it auto logs to console
 app.use(logger("dev"));
 
-// Set the default route
-app.get('/', (req, res) => {
-    res.render("home.ejs");});
-
-// Register other routes
-routes(app);
+// Register routes routes
+app.use('/', router);
 
 // Start the server
 const port = process.env.PORT || 9000;
