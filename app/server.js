@@ -1,13 +1,29 @@
-import express from 'express';
 import dotenv from 'dotenv';
-import bodyParser from 'body-parser'
-import logger from 'morgan'
-import * as firebase from 'firebase/app';
-import routes from './routes';
-
-
 // Load environment variabels for the app
 dotenv.config();
+import express from 'express';
+import bodyParser from 'body-parser'
+import logger from 'morgan'
+import * as path from 'path'
+import admin from 'firebase-admin';
+import routes from './routes';
+
+// Setup firebase administration
+const firebaseAdmin = admin.initializeApp({
+    credential: admin.credential.cert({
+        "type": process.env.FIREBASE_TYPE,
+        "project_id": process.env.FIREBASE_PROJECT_ID,
+        "private_key_id": process.env.FIREBASE_PRIVATE_KEY_ID,
+        "private_key": process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        "client_email": process.env.FIREBASE_CLIENT_EMAIL,
+        "client_id": process.env.FIREBASE_CLIENT_ID,
+        "auth_uri": process.env.FIREBASE_AUTH_URI,
+        "token_uri": process.env.FIREBASE_TOKEN_URI,
+        "auth_provider_x509_cert_url": process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
+        "client_x509_cert_url": process.env.FIREBASE_CLIENT_X509_CERT_URL
+    }),
+    databaseURL: "https://tastespace-185c5.firebaseio.com"
+});
 
 // Initialize the app
 const app = express();
@@ -26,16 +42,6 @@ app.use(bodyParser.urlencoded({ extended: true}));
 
 // Tell app to use a logger to when the server gets requests it auto logs to console
 app.use(logger("dev"));
-
-// Setup database (firebase)
-const dbconfig = {
-    apiKey: process.env.APIKEY,
-    authDomain: process.env.AUTHDOMAIN,
-    databaseURL: process.env.DATABASEURL,
-    storageBucket: process.env.STORAGEBUCKET,
-    messagingSenderId: process.env.MESSAGINGSENDERID
-}
-firebase.initializeApp(dbconfig);
 
 // Set the default route
 app.get('/', (req, res) => {

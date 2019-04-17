@@ -1,14 +1,88 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>TasteSpace Backend</title>
-    </head>
-    <body>
-        <h1>Welcome to the data server</h1>
-        <p>Made by Synapse Insights</p>
-        <form method="post">
-            <p>Who are you: <input type="text" name="name"/></p>
-            <button type="submit">Submit</button>
-        </form>
-    </body>
+
+<head>
+    <title>TasteSpace Backend</title>
+    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
+</head>
+
+<body>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "",
+            authDomain: "",
+            databaseURL: "",
+            projectId: "",
+            storageBucket: "",
+            messagingSenderId: ""
+        };
+        firebase.initializeApp(config);
+    </script>
+    <h1>Welcome to the data server</h1>
+    <p>Made by Synapse Insights</p>
+    <h2>Login with Firebase</h2>
+    <img src="" id="google-pic" />
+    <p id="google-email"></p>
+    <p id="google-name"></p>
+    <br>
+    <button onclick={signInWithGoogle()} id="google-signin">
+        Sign In with Google
+    </button>
+    <button onclick={signOutWithGoogle()} id="google-signout" style="display: none; visibility: hidden">
+        Sign Out
+    </button>
+    <!-- <script src="firebaseAuth.js"></script> -->
+    <script>
+        function checkIfLoggedIn() {
+            console.log("running checkIfLoggedIn")
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    console.log("user logged in")
+                    document.getElementById('google-signin').setAttribute('style', 'display: none; visibility: hidden');
+                    document.getElementById('google-signout').setAttribute('style', 'display: inline-block; visibility: visible');
+                    document.getElementById("google-name").innerHTML = user.displayName;
+                    document.getElementById("google-email").textContent = user.email;
+                    document.getElementById("google-pic").setAttribute('src', user.photoURL);
+                } else {
+                    console.log("user logged out")
+                    document.getElementById('google-signin').setAttribute('style', 'display: inline-block; visibility: visible');
+                    document.getElementById('google-signout').setAttribute('style', 'display: none; visibility: hidden');
+                    document.getElementById("google-name").innerHTML = ''
+                    document.getElementById("google-email").textContent = '' 
+                    document.getElementById("google-pic").setAttribute('src','');
+                }
+            })
+            var user = firebase.auth().currentUser;
+            console.log(user);
+        }
+        window.onload = function () {
+            checkIfLoggedIn()
+        }
+
+        function signOutWithGoogle() {
+            firebase.auth().signOut()
+            document.getElementById('google-pic')
+                .setAttribute('src', '')
+
+        }
+
+        function signInWithGoogle() {
+            // User firebase methods to login with google
+            // Using old JS style for browser compatibility
+            var googleAuthProvider = new firebase.auth.GoogleAuthProvider;
+            firebase.auth().signInWithPopup(googleAuthProvider)
+                .then(function (data) {
+                    console.log(data);
+                    document.getElementById("google-name").innerHTML = data.user.displayName;
+                    document.getElementById("google-email").textContent = data.user.email;
+                    document.getElementById("google-pic").setAttribute('src', data.user.photoURL);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+    </script>
+</body>
+
 </html>
